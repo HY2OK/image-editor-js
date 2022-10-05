@@ -5,8 +5,9 @@ const filterName = document.querySelector('.filter-info .name')
 const filterValue = document.querySelector('.filter-info .value')
 const filterSlider = document.querySelector('.slider input')
 const filterOptions = document.querySelectorAll('.filter button')
-
 const rotateOptions = document.querySelectorAll('.rotate button')
+const resetFilterBtn = document.querySelector('.reset-filter')
+
 let rotate = 0,
     filpHorizontal = 1,
     flipVertical = 1
@@ -88,6 +89,21 @@ rotateOptions.forEach(option => {
     })
 })
 
+const resetFilter = () => {
+    rotate = 0
+    filpHorizontal = 1
+    flipVertical = 1
+
+    brightness = 100
+    saturation = 100
+    inversion = 0
+    grayscale = 0
+
+    filterOptions[0].click()
+    applyFilters()
+}
+
 fileInput.addEventListener('change', loadImage)
 filterSlider.addEventListener('input', updateFilter)
+resetFilterBtn.addEventListener('click', resetFilter)
 chooseImgBtn.addEventListener('click', () => fileInput.click())
