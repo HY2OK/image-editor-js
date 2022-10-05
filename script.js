@@ -7,6 +7,7 @@ const filterSlider = document.querySelector('.slider input')
 const filterOptions = document.querySelectorAll('.filter button')
 const rotateOptions = document.querySelectorAll('.rotate button')
 const resetFilterBtn = document.querySelector('.reset-filter')
+const saveImgBtn = document.querySelector('.save-img')
 
 let rotate = 0,
     filpHorizontal = 1,
@@ -27,6 +28,7 @@ const loadImage = () => {
     if (!file) return
     previewImg.src = URL.createObjectURL(file)
     previewImg.addEventListener('load', () => {
+        resetFilterBtn.click()
         document.querySelector('.container').classList.remove('disable')
     })
 }
@@ -103,7 +105,29 @@ const resetFilter = () => {
     applyFilters()
 }
 
+const saveImage = () => {
+    console.log('Save image btn clicked')
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+    canvas.width = previewImg.naturalWidth
+    canvas.height = previewImg.naturalHeight
+
+    ctx.filter = `brightness(${brightness}%) saturate(${saturation}%) invert(${inversion}%) grayscale(${grayscale}%)`
+    ctx.translate(canvas.width / 2, canvas.height / 2)
+    if (rotate !== 0) {
+        ctx.rotate((rotate * Math.PI) / 180)
+    }
+    ctx.scale(filpHorizontal, flipVertical)
+    ctx.drawImage(previewImg, -canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height)
+
+    const link = document.createElement('a')
+    link.download = 'image.jpg'
+    link.href = canvas.toDataURL()
+    link.click()
+}
+
 fileInput.addEventListener('change', loadImage)
 filterSlider.addEventListener('input', updateFilter)
 resetFilterBtn.addEventListener('click', resetFilter)
+saveImgBtn.addEventListener('click', saveImage)
 chooseImgBtn.addEventListener('click', () => fileInput.click())
