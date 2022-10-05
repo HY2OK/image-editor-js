@@ -6,10 +6,16 @@ const filterValue = document.querySelector('.filter-info .value')
 const filterSlider = document.querySelector('.slider input')
 const filterOptions = document.querySelectorAll('.filter button')
 
+const rotateOptions = document.querySelectorAll('.rotate button')
+
 let brightness = 100,
     saturation = 100,
     inversion = 0,
     grayscale = 0
+
+const applyFilters = () => {
+    previewImg.style.filter = `brightness(${brightness}%) saturate(${saturation}%) invert(${inversion}%) grayscale(${grayscale}%)`
+}
 
 const loadImage = () => {
     let file = fileInput.files[0]
@@ -51,7 +57,7 @@ const updateFilter = () => {
     filterValue.innerText = `${filterSlider.value}%`
     const selectedFilter = document.querySelector('.filter .active')
 
-    if ((selectedFilter.id = 'brightness')) {
+    if (selectedFilter.id === 'brightness') {
         brightness = filterSlider.value
     } else if (selectedFilter.id === 'saturation') {
         saturation = filterSlider.value
@@ -60,6 +66,7 @@ const updateFilter = () => {
     } else {
         grayscale = filterSlider.value
     }
+    applyFilters()
 }
 
 fileInput.addEventListener('change', loadImage)
